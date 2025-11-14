@@ -1,0 +1,11 @@
+.price-chart {
+  background-color: var(--color-bg);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.volume-chart {
+  margin-top: var(--spacing-lg);
+}
+
