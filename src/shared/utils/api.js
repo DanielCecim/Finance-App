@@ -2,7 +2,7 @@
  * API utilities for backend communication
  */
 
-const API_BASE = '/v1'
+const API_BASE = import.meta.env.VITE_API_URL || '/v1'
 
 /**
  * Generate a unique request ID for tracing

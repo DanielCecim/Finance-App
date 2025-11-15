@@ -2,7 +2,7 @@
  * Stock data utilities - proxied through backend to avoid CORS
  */
 
-const API_BASE = '/v1'
+const API_BASE = import.meta.env.VITE_API_URL || '/v1'
 
 /**
  * Load stock data from backend
