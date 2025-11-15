@@ -2,7 +2,23 @@
  * API utilities for backend communication
  */
 
+// Get API base URL from environment variable
+// In production, this MUST be set to your Railway backend URL
+// In development, it defaults to '/v1' which uses Vite proxy
 const API_BASE = import.meta.env.VITE_API_URL || '/v1'
+
+// Validate API_BASE on load
+if (typeof window !== 'undefined') {
+  console.log('🔗 API Base URL:', API_BASE)
+  
+  // Warn if using relative URL in production
+  if (API_BASE.startsWith('/') && window.location.hostname !== 'localhost') {
+    console.warn(
+      '⚠️ WARNING: Using relative API URL in production. ' +
+      'Set VITE_API_URL environment variable to your Railway backend URL.'
+    )
+  }
+}
 
 /**
  * Generate a unique request ID for tracing
@@ -17,23 +33,45 @@ export function generateRequestId() {
 export async function fetchJSON(url, options = {}) {
   const requestId = generateRequestId()
   
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Request-Id': requestId,
-      ...options.headers,
-    },
-  })
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Request-Id': requestId,
+        ...options.headers,
+      },
+    })
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({
-      error: { message: response.statusText },
-    }))
-    throw new Error(error.error?.message || 'Request failed')
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        error: { message: response.statusText },
+      }))
+      throw new Error(error.error?.message || `Request failed with status ${response.status}`)
+    }
+
+    return response.json()
+  } catch (error) {
+    // Enhance error message for common CORS/network issues
+    if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+      console.error('❌ Network Error Details:', {
+        url,
+        API_BASE,
+        error: error.message,
+        possibleCauses: [
+          'CORS not configured on backend',
+          'Backend not running or unreachable',
+          'Wrong API URL in VITE_API_URL',
+          'Mixed content (HTTP/HTTPS)',
+        ]
+      })
+      throw new Error(
+        `Cannot connect to backend at ${url}. ` +
+        `Check console for details. Ensure VITE_API_URL is set correctly.`
+      )
+    }
+    throw error
   }
-
-  return response.json()
 }
 
 /**

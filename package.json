@@ -12,7 +12,10 @@
     "backend": "cd backend && uvicorn api:app --reload --port 8000",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "validate-env": "node -e \"console.log('Use: .\\\\scripts\\\\validate-env.ps1 (Windows) or ./scripts/validate-env.sh (Mac/Linux)')\"",
+    "validate-env:win": "powershell -ExecutionPolicy Bypass -File .\\scripts\\validate-env.ps1",
+    "validate-env:unix": "bash ./scripts/validate-env.sh"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

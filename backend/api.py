@@ -20,13 +20,24 @@ from agent import agent
 
 app = FastAPI(title="Finance Agent API", version="1.0.0")
 
-# CORS configuration
+# CORS configuration - read from environment variable for production
+# Format: comma-separated list of origins
+# Example: "https://yourdomain.vercel.app,https://www.yourdomain.com"
+cors_origins_str = os.getenv(
+    "CORS_ORIGINS", 
+    "http://localhost:3000,http://127.0.0.1:3000"
+)
+cors_origins = [origin.strip() for origin in cors_origins_str.split(",")]
+
+print(f"🔒 CORS enabled for origins: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Request/Response Models
@@ -55,6 +66,12 @@ class HealthResponse(BaseModel):
 # In-memory session store (replace with Redis in production)
 sessions = {}
 
+# Explicit OPTIONS handler for preflight requests
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    """Handle preflight OPTIONS requests"""
+    return {"status": "ok"}
+
 @app.get("/v1/health")
 async def health_check() -> HealthResponse:
     """Health check endpoint"""
@@ -63,6 +80,15 @@ async def health_check() -> HealthResponse:
         version="1.0.0",
         timestamp=datetime.utcnow().isoformat()
     )
+
+@app.get("/v1/debug/cors")
+async def debug_cors():
+    """Debug endpoint to check CORS configuration"""
+    return {
+        "cors_origins": cors_origins,
+        "environment": os.getenv("ENVIRONMENT", "development"),
+        "message": "If you can see this from your frontend, CORS is working!"
+    }
 
 @app.post("/v1/chat")
 async def chat(

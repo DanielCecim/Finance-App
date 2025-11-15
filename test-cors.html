@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS & Connection Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            margin-top: 20px;
+        }
+        
+        .test-item {
+            background: #f8f9fa;
+            border-left: 4px solid #ccc;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .test-item.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .test-item.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .test-item.pending {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .test-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .test-item pre {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            margin-top: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .icon {
+            font-size: 20px;
+        }
+        
+        .summary {
+            background: #e7f3ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .summary.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .summary.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .help {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .help h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .help ul {
+            margin-left: 20px;
+            color: #666;
+        }
+        
+        .help code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 CORS & Connection Tester</h1>
+        <p class="subtitle">Test your Railway backend from any origin (simulates Vercel)</p>
+        
+        <div class="input-group">
+            <label for="backendUrl">Backend URL (Railway):</label>
+            <input 
+                type="text" 
+                id="backendUrl" 
+                placeholder="https://your-backend.railway.app"
+                value="http://localhost:8000"
+            >
+        </div>
+        
+        <button id="testButton" onclick="runAllTests()">
+            🚀 Run All Tests
+        </button>
+        
+        <div class="results" id="results"></div>
+        
+        <div class="help">
+            <h3>📖 How to Use:</h3>
+            <ul>
+                <li>Enter your Railway backend URL (e.g., <code>https://finance-app-production.up.railway.app</code>)</li>
+                <li>Click "Run All Tests" to check CORS, connectivity, and configuration</li>
+                <li>Check the results below - all should be green ✅</li>
+                <li>If any tests fail, follow the suggestions in the error message</li>
+            </ul>
+            <br>
+            <h3>🔍 What This Tests:</h3>
+            <ul>
+                <li><strong>CORS Configuration:</strong> Checks if backend accepts requests from this origin</li>
+                <li><strong>Health Check:</strong> Verifies backend is running and responding</li>
+                <li><strong>Debug Endpoint:</strong> Shows current CORS configuration on backend</li>
+                <li><strong>Preflight (OPTIONS):</strong> Tests if preflight requests work correctly</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        let testsRun = 0;
+        let testsPassed = 0;
+        let testsFailed = 0;
+        
+        function updateButton(testing) {
+            const button = document.getElementById('testButton');
+            if (testing) {
+                button.disabled = true;
+                button.innerHTML = '<span class="spinner">⏳</span> Testing...';
+            } else {
+                button.disabled = false;
+                button.innerHTML = '🚀 Run All Tests';
+            }
+        }
+        
+        function addTestResult(title, status, message, details = null) {
+            const results = document.getElementById('results');
+            const testItem = document.createElement('div');
+            testItem.className = `test-item ${status}`;
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                pending: '⏳'
+            };
+            
+            let html = `
+                <h3>
+                    <span class="icon">${icons[status]}</span>
+                    ${title}
+                </h3>
+                <p>${message}</p>
+            `;
+            
+            if (details) {
+                html += `<pre>${JSON.stringify(details, null, 2)}</pre>`;
+            }
+            
+            testItem.innerHTML = html;
+            results.appendChild(testItem);
+            
+            testsRun++;
+            if (status === 'success') testsPassed++;
+            if (status === 'error') testsFailed++;
+        }
+        
+        function addSummary() {
+            const results = document.getElementById('results');
+            const summary = document.createElement('div');
+            
+            const allPassed = testsFailed === 0 && testsRun > 0;
+            summary.className = `summary ${allPassed ? 'success' : 'error'}`;
+            
+            if (allPassed) {
+                summary.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 10px;">🎉</div>
+                    <div style="font-size: 20px;">All Tests Passed!</div>
+                    <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">
+                        Your backend is properly configured and reachable.
+                    </div>
+                `;
+            } else {
+                summary.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 10px;">⚠️</div>
+                    <div style="font-size: 20px;">${testsFailed} Test(s) Failed</div>
+                    <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">
+                        Check the error messages above and follow the suggestions.
+                    </div>
+                `;
+            }
+            
+            results.appendChild(summary);
+        }
+        
+        async function testCORS(backendUrl) {
+            try {
+                addTestResult('CORS Configuration', 'pending', 'Testing CORS headers...');
+                
+                const response = await fetch(`${backendUrl}/v1/debug/cors`, {
+                    method: 'GET',
+                    mode: 'cors',
+                });
+                
+                const data = await response.json();
+                
+                // Remove pending
+                document.querySelector('.test-item.pending').remove();
+                
+                addTestResult(
+                    'CORS Configuration',
+                    'success',
+                    `CORS is properly configured. Backend allows ${data.cors_origins.length} origin(s).`,
+                    data
+                );
+                
+                return true;
+            } catch (error) {
+                document.querySelector('.test-item.pending')?.remove();
+                
+                addTestResult(
+                    'CORS Configuration',
+                    'error',
+                    `CORS test failed: ${error.message}. 
+                     Make sure CORS_ORIGINS environment variable is set on Railway to include this page's origin or use "*" for testing.`,
+                    { error: error.message, origin: window.location.origin }
+                );
+                
+                return false;
+            }
+        }
+        
+        async function testHealth(backendUrl) {
+            try {
+                addTestResult('Health Check', 'pending', 'Checking if backend is alive...');
+                
+                const response = await fetch(`${backendUrl}/v1/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                });
+                
+                const data = await response.json();
+                
+                document.querySelectorAll('.test-item.pending')[0].remove();
+                
+                if (data.status === 'healthy') {
+                    addTestResult(
+                        'Health Check',
+                        'success',
+                        `Backend is healthy and running (version ${data.version}).`,
+                        data
+                    );
+                    return true;
+                } else {
+                    throw new Error('Backend returned unhealthy status');
+                }
+            } catch (error) {
+                document.querySelectorAll('.test-item.pending')[0]?.remove();
+                
+                addTestResult(
+                    'Health Check',
+                    'error',
+                    `Health check failed: ${error.message}. 
+                     Verify that your backend is deployed and running on Railway.`,
+                    { error: error.message, url: `${backendUrl}/v1/health` }
+                );
+                
+                return false;
+            }
+        }
+        
+        async function testPreflight(backendUrl) {
+            try {
+                addTestResult('Preflight (OPTIONS)', 'pending', 'Testing OPTIONS requests...');
+                
+                const response = await fetch(`${backendUrl}/v1/health`, {
+                    method: 'OPTIONS',
+                    mode: 'cors',
+                });
+                
+                document.querySelectorAll('.test-item.pending')[0].remove();
+                
+                if (response.ok) {
+                    addTestResult(
+                        'Preflight (OPTIONS)',
+                        'success',
+                        'Preflight requests are handled correctly.',
+                        { status: response.status, statusText: response.statusText }
+                    );
+                    return true;
+                } else {
+                    throw new Error(`OPTIONS returned ${response.status}`);
+                }
+            } catch (error) {
+                document.querySelectorAll('.test-item.pending')[0]?.remove();
+                
+                addTestResult(
+                    'Preflight (OPTIONS)',
+                    'error',
+                    `Preflight test failed: ${error.message}. 
+                     This may cause issues with POST requests from your frontend.`,
+                    { error: error.message }
+                );
+                
+                return false;
+            }
+        }
+        
+        async function testConnection(backendUrl) {
+            try {
+                addTestResult('Connection Test', 'pending', 'Testing basic connectivity...');
+                
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                
+                const response = await fetch(`${backendUrl}/v1/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeout);
+                
+                document.querySelectorAll('.test-item.pending')[0].remove();
+                
+                addTestResult(
+                    'Connection Test',
+                    'success',
+                    `Successfully connected to backend at ${backendUrl}`,
+                    { 
+                        status: response.status, 
+                        url: backendUrl,
+                        headers: {
+                            'content-type': response.headers.get('content-type'),
+                            'access-control-allow-origin': response.headers.get('access-control-allow-origin')
+                        }
+                    }
+                );
+                
+                return true;
+            } catch (error) {
+                document.querySelectorAll('.test-item.pending')[0]?.remove();
+                
+                let message = `Connection failed: ${error.message}. `;
+                
+                if (error.name === 'AbortError') {
+                    message = 'Connection timeout after 10 seconds. ';
+                }
+                
+                message += 'Check that: 1) Backend URL is correct, 2) Backend is deployed on Railway, 3) No firewall blocking requests.';
+                
+                addTestResult(
+                    'Connection Test',
+                    'error',
+                    message,
+                    { error: error.message, url: backendUrl }
+                );
+                
+                return false;
+            }
+        }
+        
+        async function runAllTests() {
+            const backendUrl = document.getElementById('backendUrl').value.trim();
+            
+            if (!backendUrl) {
+                alert('Please enter a backend URL');
+                return;
+            }
+            
+            // Validate URL
+            try {
+                new URL(backendUrl);
+            } catch {
+                alert('Please enter a valid URL (e.g., https://your-backend.railway.app)');
+                return;
+            }
+            
+            // Clear previous results
+            document.getElementById('results').innerHTML = '';
+            testsRun = 0;
+            testsPassed = 0;
+            testsFailed = 0;
+            
+            updateButton(true);
+            
+            // Run tests sequentially
+            await testConnection(backendUrl);
+            await testHealth(backendUrl);
+            await testCORS(backendUrl);
+            await testPreflight(backendUrl);
+            
+            // Add summary
+            addSummary();
+            
+            updateButton(false);
+        }
+        
+        // Auto-detect API URL from localStorage or environment
+        window.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('backendUrl');
+            
+            // Try to get from various sources
+            const savedUrl = localStorage.getItem('VITE_API_URL');
+            if (savedUrl && savedUrl !== '/v1') {
+                input.value = savedUrl;
+            }
+        });
+    </script>
+</body>
+</html>
+

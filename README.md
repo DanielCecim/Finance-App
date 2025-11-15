@@ -180,8 +180,25 @@ This project follows the coding best practices outlined in `coding_best_practice
 - ✅ Auto-deployments from GitHub
 - ✅ Global CDN
 - ✅ Zero DevOps needed
+- ✅ **CORS properly configured for production** 🔒
 
 **Cost:** $0-10/month (free tier + OpenAI usage)
+
+---
+
+### 🔧 CORS & Connection Issues Fixed!
+
+The codebase now includes proper CORS configuration and debugging tools:
+
+- ✅ **Dynamic CORS origins** via environment variables
+- ✅ **Preflight request handling** for all endpoints
+- ✅ **Debug endpoint** to test CORS configuration
+- ✅ **Better error messages** for troubleshooting
+- ✅ **Visual test tool** included (`test-cors.html`)
+
+**Having connection issues?** → **[Fix CORS Issues Guide](docs/FIX_CORS_ISSUES.md)** 🔧
+
+**Quick test:** Open `test-cors.html` in your browser to verify your configuration!
 
 ---
 
@@ -192,7 +209,7 @@ This project follows the coding best practices outlined in `coding_best_practice
 The guide covers:
 1. Creating Railway account & deploying backend
 2. Creating Vercel account & deploying frontend
-3. Connecting them together
+3. Connecting them together (with proper CORS setup)
 4. Testing your live app
 5. Troubleshooting common issues
 
@@ -230,9 +247,12 @@ The guide covers:
 ### 🔗 Useful Links
 
 - 📖 **[DEPLOY NOW - Full Guide](docs/DEPLOY_NOW.md)** - Complete walkthrough
+- 🔧 **[Fix CORS Issues](docs/FIX_CORS_ISSUES.md)** - Troubleshoot connection problems
+- ✅ **[CORS Fixes Applied](CORS_FIXES_APPLIED.md)** - Summary of all fixes
 - ✅ **[Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)** - Pre-launch verification
 - 🔐 **[Environment Variables](docs/ENV_VARIABLES.md)** - Configuration reference
 - 📊 **[Deployment Summary](docs/DEPLOYMENT_SUMMARY.md)** - Overview & costs
+- 🧪 **[CORS Test Tool](test-cors.html)** - Visual testing tool (open in browser)
 
 ## License
 
