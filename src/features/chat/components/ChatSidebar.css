@@ -3,9 +3,16 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
-  border-right: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(102, 126, 234, 0.1);
   position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .chat-sidebar {
+  background: rgba(28, 28, 30, 0.95);
+  border-left-color: rgba(102, 126, 234, 0.2);
 }
 
 .chat-sidebar-collapsed {
@@ -16,10 +23,13 @@
 
 .chat-header {
   padding: var(--spacing-md);
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+}
+
+[data-theme="dark"] .chat-header {
+  border-bottom-color: rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
 }
 
 .chat-header-title {
@@ -28,9 +38,40 @@
   align-items: center;
 }
 
+.chat-title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 .chat-header h3 {
   margin: 0;
   font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+.new-chat-btn {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.new-chat-btn:hover:not(:disabled) {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.new-chat-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .chat-toggle {
@@ -41,19 +82,23 @@
   padding: var(--spacing-xs);
   border-radius: var(--border-radius);
   transition: background-color 0.2s;
+  color: var(--color-text);
 }
 
 .chat-toggle:hover {
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg-tertiary);
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .chat-empty {
@@ -65,6 +110,11 @@
   text-align: center;
   color: var(--color-text-secondary);
   gap: var(--spacing-sm);
+}
+
+.chat-empty p {
+  color: var(--color-text-secondary);
+  margin: 0;
 }
 
 @media (max-width: 1024px) {

@@ -9,6 +9,7 @@ function ChatInput() {
   const textareaRef = useRef(null)
   
   const isStreaming = useChatStore((state) => state.isStreaming)
+  const isLoading = useChatStore((state) => state.isLoading)
   const { sendMessage, cancelStream } = useSendMessage()
 
   // Auto-resize textarea
@@ -22,7 +23,7 @@ function ChatInput() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!input.trim() || isStreaming) return
+    if (!input.trim() || isStreaming || isLoading) return
 
     const message = input.trim()
     setInput('')
@@ -51,7 +52,7 @@ function ChatInput() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask me about stocks, analysis, or financial data..."
-          disabled={isStreaming}
+          disabled={isStreaming || isLoading}
           rows={1}
           className="chat-input-textarea"
         />
@@ -69,7 +70,8 @@ function ChatInput() {
             type="submit"
             variant="primary"
             size="small"
-            disabled={!input.trim()}
+            disabled={!input.trim() || isLoading}
+            loading={isLoading}
           >
             Send
           </Button>

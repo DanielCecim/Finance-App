@@ -6,6 +6,7 @@ import { create } from 'zustand'
 const useChatStore = create((set, get) => ({
   messages: [],
   isStreaming: false,
+  isLoading: false,
   currentStreamingMessage: null,
 
   // Add a user message
@@ -20,6 +21,30 @@ const useChatStore = create((set, get) => ({
       messages: [...state.messages, message],
     }))
     return message
+  },
+
+  // Add loading message
+  addLoadingMessage: () => {
+    const message = {
+      id: `loading-${Date.now()}`,
+      role: 'assistant',
+      content: '',
+      isLoading: true,
+      timestamp: Date.now(),
+    }
+    set((state) => ({
+      messages: [...state.messages, message],
+      isLoading: true,
+    }))
+    return message.id
+  },
+
+  // Remove loading message
+  removeLoadingMessage: () => {
+    set((state) => ({
+      messages: state.messages.filter((msg) => !msg.isLoading),
+      isLoading: false,
+    }))
   },
 
   // Start streaming an assistant message
@@ -75,6 +100,7 @@ const useChatStore = create((set, get) => ({
     set({
       messages: [],
       isStreaming: false,
+      isLoading: false,
       currentStreamingMessage: null,
     })
   },

@@ -1,9 +1,15 @@
+import { useRef, useEffect } from 'react'
 import { useDashboardStore } from '../state/dashboardStore'
+import { gsap } from 'gsap'
+import { shouldReduceMotion, easing } from '../../../shared/utils/animations'
 import './KeyMetrics.css'
 
 function KeyMetrics() {
   const stockData = useDashboardStore((state) => state.stockData)
   const period = useDashboardStore((state) => state.period)
+  
+  const metricsRef = useRef(null)
+  const cardsAnimated = useRef(false)
 
   if (!stockData || stockData.length === 0) return null
 
@@ -25,8 +31,39 @@ function KeyMetrics() {
   const displayChangePct = isShortPeriod ? dailyChangePct : periodChangePct
   const changeLabel = isShortPeriod ? 'Daily Change' : 'Period Change'
 
+  // Staggered entrance animation for metric cards
+  useEffect(() => {
+    if (!metricsRef.current || cardsAnimated.current || shouldReduceMotion()) return
+
+    const cards = metricsRef.current.querySelectorAll('.metric-card')
+    
+    if (cards.length > 0) {
+      // Add animated class first
+      cards.forEach(card => card.classList.add('animated'))
+      
+      // Then animate
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 20, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.3,
+          stagger: 0.08,
+          ease: easing.smooth,
+          clearProps: 'all',
+          onComplete: () => {
+            cards.forEach(card => card.classList.remove('animated'))
+          }
+        }
+      )
+      cardsAnimated.current = true
+    }
+  }, [stockData])
+
   return (
-    <div className="key-metrics">
+    <div className="key-metrics" ref={metricsRef}>
       <div className="metric-card">
         <div className="metric-label">Current Price</div>
         <div className="metric-value">${currentPrice.toFixed(2)}</div>

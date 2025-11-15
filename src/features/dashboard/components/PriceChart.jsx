@@ -1,13 +1,27 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Plot from 'react-plotly.js'
 import { useDashboardStore } from '../state/dashboardStore'
 import { calculateTechnicalIndicators } from '../../../shared/utils/stockApi'
+import { applyThemeToLayout } from '../../../shared/utils/plotlyTheme'
 import './PriceChart.css'
 
 function PriceChart() {
   const stockData = useDashboardStore((state) => state.stockData)
   const symbol = useDashboardStore((state) => state.symbol)
   const period = useDashboardStore((state) => state.period)
+  const [, setThemeUpdate] = useState(0)
+
+  // Force re-render when theme changes
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setThemeUpdate(prev => prev + 1)
+    })
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    })
+    return () => observer.disconnect()
+  }, [])
 
   const chartData = useMemo(() => {
     if (!stockData) return null
@@ -85,7 +99,7 @@ function PriceChart() {
             fillcolor: 'rgba(255, 0, 0, 0.1)',
           },
         ]}
-        layout={{
+        layout={applyThemeToLayout({
           title: `${symbol} Stock Analysis - ${periodLabel}`,
           xaxis: { title: 'Date' },
           yaxis: { title: 'Price ($)' },
@@ -99,7 +113,7 @@ function PriceChart() {
             x: 1,
           },
           autosize: true,
-        }}
+        })}
         useResizeHandler
         style={{ width: '100%', height: '500px' }}
         config={{ responsive: true }}
@@ -115,22 +129,51 @@ function PriceChart() {
               name: 'Volume',
               marker: {
                 color: volumes.map((_, i) =>
-                  i > 0 && closes[i] >= closes[i - 1] ? 'green' : 'red'
+                  i > 0 && closes[i] >= closes[i - 1] ? '#32D74B' : '#FF453A'
                 ),
-                opacity: 0.7,
+                opacity: 0.85,
+                line: {
+                  width: 0
+                }
               },
+              hovertemplate: '<b>Date:</b> %{x}<br><b>Volume:</b> %{y:,.0f}<extra></extra>',
             },
           ]}
-          layout={{
-            title: 'Volume',
-            xaxis: { title: 'Date' },
-            yaxis: { title: 'Volume' },
+          layout={applyThemeToLayout({
+            title: {
+              text: 'Trading Volume',
+              font: {
+                size: 18,
+                weight: 600
+              }
+            },
+            xaxis: { 
+              title: 'Date',
+              showgrid: true,
+            },
+            yaxis: { 
+              title: 'Volume',
+              showgrid: true,
+              tickformat: ',.0f',
+            },
             showlegend: false,
             autosize: true,
-          }}
+            margin: {
+              l: 80,
+              r: 40,
+              t: 60,
+              b: 60
+            },
+            bargap: 0.2,
+          })}
           useResizeHandler
-          style={{ width: '100%', height: '200px' }}
-          config={{ responsive: true }}
+          style={{ width: '100%', height: '400px' }}
+          config={{ 
+            responsive: true,
+            displayModeBar: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['select2d', 'lasso2d']
+          }}
         />
       </div>
     </div>

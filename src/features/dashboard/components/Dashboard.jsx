@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useDashboardStore } from '../state/dashboardStore'
+import { useScrollAnimation } from '../../../shared/hooks/useScrollAnimation'
 import StockSearch from './StockSearch'
 import KeyMetrics from './KeyMetrics'
 import PriceChart from './PriceChart'
@@ -16,10 +17,18 @@ function Dashboard() {
   const error = useDashboardStore((state) => state.error)
   const symbol = useDashboardStore((state) => state.symbol)
 
+  // Animation refs
+  const dashboardRef = useRef(null)
+  const headerRef = useRef(null)
+
+  // Apply scroll animations
+  useScrollAnimation(dashboardRef)
+  useScrollAnimation(headerRef, { from: { opacity: 0, y: 30 }, to: { opacity: 1, y: 0, duration: 0.8 } })
+
   return (
     <div className="dashboard">
-      <div className="dashboard-container">
-        <h1 className="dashboard-title">📈 Stock Dashboard</h1>
+      <div className="dashboard-container" ref={dashboardRef}>
+        <h1 className="dashboard-title"> Stock Dashboard</h1>
         
         <StockSearch />
 
@@ -33,7 +42,7 @@ function Dashboard() {
 
         {!loading && !error && stockData && (
           <>
-            <div className="dashboard-header">
+            <div className="dashboard-header" ref={headerRef}>
               <h2>{symbol} Analysis Dashboard</h2>
             </div>
 

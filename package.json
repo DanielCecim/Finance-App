@@ -9,26 +9,38 @@
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
-    "backend": "cd backend && uvicorn api:app --reload --port 8000"
+    "backend": "cd backend && uvicorn api:app --reload --port 8000",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "date-fns": "^3.0.6",
+    "gsap": "^3.13.0",
+    "katex": "^0.16.25",
+    "plotly.js": "^2.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "zustand": "^4.5.0",
-    "plotly.js": "^2.29.0",
+    "react-markdown": "^9.0.1",
     "react-plotly.js": "^2.6.0",
-    "date-fns": "^3.0.6"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^4.0.9",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "happy-dom": "^20.0.10",
     "prettier": "^3.2.5",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vitest": "^4.0.9"
   }
 }
-

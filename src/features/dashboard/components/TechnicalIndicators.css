@@ -1,14 +1,21 @@
 .technical-indicators {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
 }
 
 .indicator-chart {
-  background-color: var(--color-bg);
-  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+[data-theme="dark"] .indicator-chart {
+  background: rgba(28, 28, 30, 0.8);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
 .indicator-chart h3 {

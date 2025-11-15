@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useDashboardStore } from '../state/dashboardStore'
 import Input from '../../../shared/components/Input'
 import Select from '../../../shared/components/Select'
-import Button from '../../../shared/components/Button'
 import './StockSearch.css'
 
 const PERIOD_OPTIONS = [
@@ -28,41 +27,43 @@ function StockSearch() {
   const [localSymbol, setLocalSymbol] = useState(symbol || 'MSFT')
   const [localPeriod, setLocalPeriod] = useState(period || '1y')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (localSymbol.trim()) {
+    if (localSymbol.trim() && !loading) {
       loadStockData(localSymbol.toUpperCase(), localPeriod)
     }
   }
 
   return (
-    <form className="stock-search" onSubmit={handleSubmit}>
-      <Input
-        type="text"
-        value={localSymbol}
-        onChange={(e) => setLocalSymbol(e.target.value.toUpperCase())}
-        placeholder="Enter Stock Symbol (e.g., AAPL)"
-        disabled={loading}
-        className="stock-search-input"
-      />
-      
-      <Select
-        value={localPeriod}
-        onChange={(e) => setLocalPeriod(e.target.value)}
-        options={PERIOD_OPTIONS}
-        disabled={loading}
-        className="stock-search-select"
-      />
-      
-      <Button
-        type="submit"
-        variant="primary"
-        disabled={loading || !localSymbol.trim()}
-        loading={loading}
-      >
-        Load Data
-      </Button>
-    </form>
+    <>
+      <form className="stock-search" onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          value={localSymbol}
+          onChange={(e) => setLocalSymbol(e.target.value.toUpperCase())}
+          placeholder="Enter Stock Symbol (e.g., AAPL)"
+          disabled={loading}
+          className="stock-search-input"
+        />
+        
+        <Select
+          value={localPeriod}
+          onChange={(e) => setLocalPeriod(e.target.value)}
+          options={PERIOD_OPTIONS}
+          disabled={loading}
+          className="stock-search-select"
+        />
+        
+        <button
+          type="submit"
+          className="load-data-button"
+          disabled={loading || !localSymbol.trim()}
+        >
+          <span className="button-text">Load Data</span>
+          <span className="button-arrow">→</span>
+        </button>
+      </form>
+    </>
   )
 }
 

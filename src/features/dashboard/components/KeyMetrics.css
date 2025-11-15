@@ -1,43 +1,100 @@
+/* Key Metrics - Apple Premium Card Design */
+
 .key-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
+  width: 100%;
 }
 
+/* Metric Card - Adaptive Design */
 .metric-card {
   padding: var(--spacing-lg);
-  background-color: var(--color-bg);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: all var(--transition-base);
+  opacity: 1;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
 }
 
-.metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+[data-theme="dark"] .metric-card {
+  background: rgba(28, 28, 30, 0.8);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
+/* Top Border Accent */
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.metric-card:hover::before {
+  opacity: 1;
+}
+
+
+/* Label - Secondary Text */
 .metric-label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-xs);
-  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em; /* Consistent with global heading styles */
+  width: 100%;
 }
 
+/* Value - Large & Bold */
 .metric-value {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: var(--font-bold);
   color: var(--color-text);
   margin-bottom: var(--spacing-xs);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  width: 100%;
 }
 
+/* Change Indicator */
 .metric-change {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--font-semibold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-secondary);
+  width: auto;
+  margin: 0 auto;
 }
 
+/* Positive/Negative States */
 .metric-positive {
+  color: var(--color-success);
+}
+
+.metric-positive .metric-change {
+  background: rgba(48, 209, 88, 0.1);
   color: var(--color-success);
 }
 
@@ -45,13 +102,133 @@
   color: var(--color-danger);
 }
 
-@media (max-width: 768px) {
-  .key-metrics {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
+.metric-negative .metric-change {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--color-danger);
+}
 
+/* All cards have consistent styling - no special first card */
+
+/* Ensure cards are always visible */
+.metric-card.animated {
+  opacity: 0;
+}
+
+/* Hover state - subtle */
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .metric-card:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .key-metrics {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+  }
+  
+  .metric-card {
+    min-height: 110px;
+  }
+  
   .metric-value {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 }
 
+@media (max-width: 1024px) {
+  .key-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .key-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .metric-card {
+    padding: var(--spacing-md);
+    min-height: 100px;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+  }
+
+  .metric-change {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .key-metrics {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .metric-card {
+    padding: var(--spacing-md);
+    min-height: 90px;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Loading Skeleton Animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.metric-card.loading {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 0px,
+    var(--color-bg-tertiary) 40px,
+    var(--color-bg-secondary) 80px
+  );
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+/* Respect User Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .metric-card {
+    opacity: 1;
+    transition: none;
+  }
+  
+  .metric-card:hover {
+    transform: none;
+  }
+
+  .metric-card::before {
+    transition: none;
+  }
+
+  .metric-card.loading {
+    animation: none;
+  }
+}
+
+/* Force Light Theme - No Dark Mode */

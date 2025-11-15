@@ -1,12 +1,26 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Plot from 'react-plotly.js'
 import { useDashboardStore } from '../state/dashboardStore'
 import { calculateTechnicalIndicators } from '../../../shared/utils/stockApi'
+import { applyThemeToLayout } from '../../../shared/utils/plotlyTheme'
 import './TechnicalIndicators.css'
 
 function TechnicalIndicators() {
   const stockData = useDashboardStore((state) => state.stockData)
   const symbol = useDashboardStore((state) => state.symbol)
+  const [, setThemeUpdate] = useState(0)
+
+  // Force re-render when theme changes
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setThemeUpdate(prev => prev + 1)
+    })
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    })
+    return () => observer.disconnect()
+  }, [])
 
   const chartData = useMemo(() => {
     if (!stockData) return null
@@ -52,7 +66,7 @@ function TechnicalIndicators() {
               line: { color: 'purple', width: 1.5 },
             },
           ]}
-          layout={{
+          layout={applyThemeToLayout({
             title: `${symbol} Moving Averages`,
             xaxis: { title: 'Date' },
             yaxis: { title: 'Price ($)' },
@@ -66,7 +80,7 @@ function TechnicalIndicators() {
               x: 0.01,
             },
             autosize: true,
-          }}
+          })}
           useResizeHandler
           style={{ width: '100%', height: '400px' }}
           config={{ responsive: true }}
@@ -86,7 +100,7 @@ function TechnicalIndicators() {
               line: { color: '#1f77b4', width: 2 },
             },
           ]}
-          layout={{
+          layout={applyThemeToLayout({
             title: `${symbol} RSI`,
             xaxis: { title: 'Date' },
             yaxis: { title: 'RSI', range: [0, 100] },
@@ -99,7 +113,7 @@ function TechnicalIndicators() {
                 x1: dates[dates.length - 1],
                 y0: 70,
                 y1: 70,
-                line: { color: 'red', width: 1, dash: 'dash' },
+                line: { color: '#FF453A', width: 1, dash: 'dash' },
               },
               {
                 type: 'line',
@@ -107,7 +121,7 @@ function TechnicalIndicators() {
                 x1: dates[dates.length - 1],
                 y0: 30,
                 y1: 30,
-                line: { color: 'green', width: 1, dash: 'dash' },
+                line: { color: '#32D74B', width: 1, dash: 'dash' },
               },
             ],
             annotations: [
@@ -129,7 +143,7 @@ function TechnicalIndicators() {
               },
             ],
             autosize: true,
-          }}
+          })}
           useResizeHandler
           style={{ width: '100%', height: '400px' }}
           config={{ responsive: true }}

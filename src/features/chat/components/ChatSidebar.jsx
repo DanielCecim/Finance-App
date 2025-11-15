@@ -3,7 +3,6 @@ import { useChatStore } from '../state/chatStore'
 import { useSessionStore } from '../../../shared/state/sessionStore'
 import ChatMessage from './ChatMessage'
 import ChatInput from './ChatInput'
-import Button from '../../../shared/components/Button'
 import './ChatSidebar.css'
 
 function ChatSidebar() {
@@ -12,6 +11,7 @@ function ChatSidebar() {
   
   const messages = useChatStore((state) => state.messages)
   const isStreaming = useChatStore((state) => state.isStreaming)
+  const isLoading = useChatStore((state) => state.isLoading)
   const clearMessages = useChatStore((state) => state.clearMessages)
   const newConversation = useSessionStore((state) => state.newConversation)
 
@@ -48,7 +48,17 @@ function ChatSidebar() {
     <aside className="chat-sidebar">
       <div className="chat-header">
         <div className="chat-header-title">
-          <h3>🤖 AI Financial Analyst</h3>
+          <div className="chat-title-section">
+            <h3> AI Financial Analyst</h3>
+            <button
+              className="new-chat-btn"
+              onClick={handleNewConversation}
+              disabled={isStreaming || isLoading}
+              aria-label="New conversation"
+            >
+              + New
+            </button>
+          </div>
           <button
             className="chat-toggle"
             onClick={() => setIsCollapsed(true)}
@@ -57,14 +67,6 @@ function ChatSidebar() {
             ✕
           </button>
         </div>
-        <Button
-          variant="ghost"
-          size="small"
-          onClick={handleNewConversation}
-          disabled={isStreaming}
-        >
-          New Chat
-        </Button>
       </div>
 
       <div className="chat-messages">

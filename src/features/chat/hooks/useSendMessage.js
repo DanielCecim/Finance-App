@@ -11,6 +11,8 @@ export function useSendMessage() {
   
   const addUserMessage = useChatStore((state) => state.addUserMessage)
   const addAssistantMessage = useChatStore((state) => state.addAssistantMessage)
+  const addLoadingMessage = useChatStore((state) => state.addLoadingMessage)
+  const removeLoadingMessage = useChatStore((state) => state.removeLoadingMessage)
   const startStreaming = useChatStore((state) => state.startStreaming)
   const appendToken = useChatStore((state) => state.appendToken)
   const endStreaming = useChatStore((state) => state.endStreaming)
@@ -22,6 +24,9 @@ export function useSendMessage() {
     try {
       // Add user message
       addUserMessage(content)
+
+      // Show loading message with spinner
+      addLoadingMessage()
 
       const { sessionId, conversationId } = getIds()
 
@@ -39,10 +44,17 @@ export function useSendMessage() {
         metadata: { ui_version: '1.0.0' },
       })
 
+      // Remove loading message
+      removeLoadingMessage()
+
       // Add assistant response
       addAssistantMessage(response.content)
     } catch (error) {
       console.error('Error sending message:', error)
+      
+      // Remove loading message
+      removeLoadingMessage()
+      
       addAssistantMessage(
         `Sorry, I encountered an error: ${error.message}. Please try again.`
       )
