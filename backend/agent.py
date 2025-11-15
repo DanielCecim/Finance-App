@@ -48,8 +48,8 @@ agent = Agent(
     instructions=open("prompts/analista.md", encoding='utf-8').read(),
 )  
 
-app = Playground(agents=[agent]).get_app()
-
+# Only create Playground app when running directly (not in production)
 if __name__ == "__main__":
+    app = Playground(agents=[agent]).get_app()
     serve_playground_app("agent:app", reload=True)
 
