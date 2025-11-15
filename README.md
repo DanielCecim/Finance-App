@@ -170,27 +170,69 @@ This project follows the coding best practices outlined in `coding_best_practice
 - **YFinance** - Financial data
 - **SSE-Starlette** - Server-sent events
 
-## Production Deployment
+## 🚀 Deploy to Production
 
-1. **Build the frontend:**
-   ```bash
-   npm run build
-   ```
+### Railway + Vercel Deployment (30 minutes)
 
-2. **Serve the frontend:**
-   The `dist/` folder contains static files that can be served by any web server (Nginx, Apache, etc.)
+**What you'll get:**
+- ✅ Free tier available
+- ✅ Automatic HTTPS
+- ✅ Auto-deployments from GitHub
+- ✅ Global CDN
+- ✅ Zero DevOps needed
 
-3. **Deploy the backend:**
-   ```bash
-   cd backend
-   uvicorn api:app --host 0.0.0.0 --port 8000
-   ```
+**Cost:** $0-10/month (free tier + OpenAI usage)
 
-4. **Environment configuration:**
-   - Set `OPENAI_API_KEY` environment variable
-   - Configure CORS origins in `api.py`
-   - Use a production ASGI server (Gunicorn + Uvicorn)
-   - Add rate limiting and authentication as needed
+---
+
+### 📖 Complete Step-by-Step Guide
+
+**→ [Follow the Deployment Guide](docs/DEPLOY_NOW.md)** ⭐
+
+The guide covers:
+1. Creating Railway account & deploying backend
+2. Creating Vercel account & deploying frontend
+3. Connecting them together
+4. Testing your live app
+5. Troubleshooting common issues
+
+**Time:** 30 minutes  
+**Difficulty:** Easy - just follow the steps!
+
+---
+
+### Quick Overview
+
+**Step 1: Deploy Backend to Railway**
+```bash
+1. Go to railway.app
+2. Connect GitHub repository
+3. Set environment variables (OPENAI_API_KEY, etc.)
+4. Get your backend URL
+```
+
+**Step 2: Deploy Frontend to Vercel**
+```bash
+1. Go to vercel.com
+2. Import GitHub repository
+3. Set VITE_API_URL to your Railway URL
+4. Get your frontend URL
+```
+
+**Step 3: Connect Them**
+```bash
+1. Update Railway CORS_ORIGINS with Vercel URL
+2. Test your app!
+```
+
+---
+
+### 🔗 Useful Links
+
+- 📖 **[DEPLOY NOW - Full Guide](docs/DEPLOY_NOW.md)** - Complete walkthrough
+- ✅ **[Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)** - Pre-launch verification
+- 🔐 **[Environment Variables](docs/ENV_VARIABLES.md)** - Configuration reference
+- 📊 **[Deployment Summary](docs/DEPLOYMENT_SUMMARY.md)** - Overview & costs
 
 ## License
 
