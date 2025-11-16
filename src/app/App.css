@@ -1,3 +1,79 @@
+/* Desktop Layout */
+.app-desktop {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-desktop .main-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--color-bg-secondary);
+}
+
+/* Mobile Layout */
+.app-mobile {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 65px; /* Space for bottom nav */
+  overflow-y: auto;
+  background-color: var(--color-bg, #F5F7FA);
+  display: none; /* Hide by default */
+  -webkit-overflow-scrolling: touch;
+  z-index: 1;
+}
+
+.mobile-view-active {
+  display: block; /* Show active view */
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Settings View */
+.settings-view {
+  padding: 2rem 1rem;
+  padding-bottom: calc(65px + 2rem); /* Bottom nav + padding */
+  min-height: 100%;
+  background-color: var(--color-bg, #F5F7FA);
+}
+
+.settings-view h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text, #000000);
+}
+
+.settings-view p {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Safe area for mobile notch/home indicator */
+@supports (padding: max(0px)) {
+  .mobile-view {
+    padding-top: env(safe-area-inset-top);
+    bottom: calc(65px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Fallback for old browsers */
 .app {
   display: flex;
   height: 100vh;
@@ -10,7 +86,7 @@
   background-color: var(--color-bg-secondary);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .app {
     flex-direction: column;
   }

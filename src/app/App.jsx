@@ -4,15 +4,28 @@ import ChatSidebar from '../features/chat/components/ChatSidebar'
 import Dashboard from '../features/dashboard/components/Dashboard'
 import LandingPage from '../features/landing/components/LandingPage'
 import ThemeToggle from '../shared/components/ThemeToggle'
+import MobileNav from '../shared/components/MobileNav'
+import DebugInfo from '../shared/components/DebugInfo'
 import { useSessionStore } from '../shared/state/sessionStore'
 import { useDashboardStore } from '../features/dashboard/state/dashboardStore'
+import { useIsMobile } from '../shared/hooks/useMediaQuery'
 import './App.css'
 
 function App() {
   const [showLanding, setShowLanding] = useState(true)
   const [initialStock, setInitialStock] = useState(null)
+  const [activeTab, setActiveTab] = useState('dashboard')
+  
+  const isMobile = useIsMobile()
   const initSession = useSessionStore((state) => state.initSession)
   const loadStockData = useDashboardStore((state) => state.loadStockData)
+
+  // Debug logging
+  useEffect(() => {
+    console.log('📱 Mobile detection:', isMobile)
+    console.log('🔍 Active tab:', activeTab)
+    console.log('📺 Window width:', window.innerWidth)
+  }, [isMobile, activeTab])
 
   useEffect(() => {
     // Initialize session on mount
@@ -39,9 +52,41 @@ function App() {
     )
   }
 
+  // Mobile Layout - Full screen views with bottom navigation
+  if (isMobile) {
+    return (
+      <ErrorBoundary>
+        <div className="app app-mobile">
+          <DebugInfo activeTab={activeTab} />
+          <ThemeToggle />
+          
+          {/* Mobile Views */}
+          <div className={`mobile-view ${activeTab === 'dashboard' ? 'mobile-view-active' : ''}`}>
+            <Dashboard />
+          </div>
+          
+          <div className={`mobile-view ${activeTab === 'chat' ? 'mobile-view-active' : ''}`}>
+            <ChatSidebar isMobile={true} />
+          </div>
+          
+          <div className={`mobile-view ${activeTab === 'settings' ? 'mobile-view-active' : ''}`}>
+            <div className="settings-view">
+              <h2>Settings</h2>
+              <p>Theme, preferences, and more coming soon...</p>
+            </div>
+          </div>
+          
+          {/* Bottom Navigation */}
+          <MobileNav activeTab={activeTab} onTabChange={setActiveTab} />
+        </div>
+      </ErrorBoundary>
+    )
+  }
+
+  // Desktop Layout - Side-by-side
   return (
     <ErrorBoundary>
-      <div className="app">
+      <div className="app app-desktop">
         <ThemeToggle />
         <ChatSidebar />
         <main className="main-content">

@@ -3,6 +3,10 @@ import Plot from 'react-plotly.js'
 import { useDashboardStore } from '../state/dashboardStore'
 import { calculateTechnicalIndicators } from '../../../shared/utils/stockApi'
 import { applyThemeToLayout } from '../../../shared/utils/plotlyTheme'
+import { 
+  applyResponsiveLayout, 
+  getResponsiveChartConfig 
+} from '../../../shared/utils/responsiveCharts'
 import './PriceChart.css'
 
 function PriceChart() {
@@ -10,6 +14,7 @@ function PriceChart() {
   const symbol = useDashboardStore((state) => state.symbol)
   const period = useDashboardStore((state) => state.period)
   const [, setThemeUpdate] = useState(0)
+  const [, setResizeUpdate] = useState(0)
 
   // Force re-render when theme changes
   useEffect(() => {
@@ -21,6 +26,13 @@ function PriceChart() {
       attributeFilter: ['data-theme']
     })
     return () => observer.disconnect()
+  }, [])
+
+  // Force re-render on window resize for responsive updates
+  useEffect(() => {
+    const handleResize = () => setResizeUpdate(prev => prev + 1)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const chartData = useMemo(() => {
@@ -51,6 +63,9 @@ function PriceChart() {
     ytd: 'Year to Date',
     max: 'All Time',
   }[period]
+
+  const mainChartConfig = getResponsiveChartConfig('main')
+  const volumeChartConfig = getResponsiveChartConfig('volume')
 
   return (
     <div className="price-chart">
@@ -99,24 +114,16 @@ function PriceChart() {
             fillcolor: 'rgba(255, 0, 0, 0.1)',
           },
         ]}
-        layout={applyThemeToLayout({
-          title: `${symbol} Stock Analysis - ${periodLabel}`,
-          xaxis: { title: 'Date' },
-          yaxis: { title: 'Price ($)' },
-          hovermode: 'x unified',
-          showlegend: true,
-          legend: {
-            orientation: 'h',
-            yanchor: 'bottom',
-            y: 1.02,
-            xanchor: 'right',
-            x: 1,
-          },
-          autosize: true,
-        })}
+        layout={applyThemeToLayout(
+          applyResponsiveLayout({
+            title: `${symbol} Stock Analysis - ${periodLabel}`,
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Price ($)' },
+          })
+        )}
         useResizeHandler
-        style={{ width: '100%', height: '500px' }}
-        config={{ responsive: true }}
+        style={mainChartConfig.style}
+        config={mainChartConfig.config}
       />
 
       <div className="volume-chart">
@@ -139,41 +146,24 @@ function PriceChart() {
               hovertemplate: '<b>Date:</b> %{x}<br><b>Volume:</b> %{y:,.0f}<extra></extra>',
             },
           ]}
-          layout={applyThemeToLayout({
-            title: {
-              text: 'Trading Volume',
-              font: {
-                size: 18,
-                weight: 600
-              }
-            },
-            xaxis: { 
-              title: 'Date',
-              showgrid: true,
-            },
-            yaxis: { 
-              title: 'Volume',
-              showgrid: true,
-              tickformat: ',.0f',
-            },
-            showlegend: false,
-            autosize: true,
-            margin: {
-              l: 80,
-              r: 40,
-              t: 60,
-              b: 60
-            },
-            bargap: 0.2,
-          })}
+          layout={applyThemeToLayout(
+            applyResponsiveLayout({
+              title: 'Trading Volume',
+              xaxis: { 
+                title: 'Date',
+                showgrid: true,
+              },
+              yaxis: { 
+                title: 'Volume',
+                showgrid: true,
+                tickformat: ',.0f',
+              },
+              bargap: 0.2,
+            }, { showLegend: false })
+          )}
           useResizeHandler
-          style={{ width: '100%', height: '400px' }}
-          config={{ 
-            responsive: true,
-            displayModeBar: true,
-            displaylogo: false,
-            modeBarButtonsToRemove: ['select2d', 'lasso2d']
-          }}
+          style={volumeChartConfig.style}
+          config={volumeChartConfig.config}
         />
       </div>
     </div>

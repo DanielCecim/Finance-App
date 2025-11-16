@@ -117,14 +117,41 @@
   margin: 0;
 }
 
+/* Mobile Full-Screen Chat */
+.chat-sidebar-mobile {
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  border-radius: 0;
+  position: static;
+}
+
+.chat-sidebar-mobile .chat-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chat-sidebar-mobile .chat-messages {
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Add padding at bottom for safe area */
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+.chat-sidebar-mobile .chat-empty {
+  padding: 2rem 1rem;
+}
+
 @media (max-width: 1024px) {
   .chat-sidebar {
     width: 320px;
   }
 }
 
-@media (max-width: 768px) {
-  .chat-sidebar {
+@media (max-width: 767px) {
+  .chat-sidebar:not(.chat-sidebar-mobile) {
     position: fixed;
     top: 0;
     right: 0;

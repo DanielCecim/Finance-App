@@ -5,7 +5,7 @@ import ChatMessage from './ChatMessage'
 import ChatInput from './ChatInput'
 import './ChatSidebar.css'
 
-function ChatSidebar() {
+function ChatSidebar({ isMobile = false }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const messagesEndRef = useRef(null)
   
@@ -30,7 +30,8 @@ function ChatSidebar() {
     }
   }
 
-  if (isCollapsed) {
+  // On mobile, never show collapsed state (uses bottom nav instead)
+  if (!isMobile && isCollapsed) {
     return (
       <div className="chat-sidebar chat-sidebar-collapsed">
         <button
@@ -45,7 +46,7 @@ function ChatSidebar() {
   }
 
   return (
-    <aside className="chat-sidebar">
+    <aside className={`chat-sidebar ${isMobile ? 'chat-sidebar-mobile' : ''}`}>
       <div className="chat-header">
         <div className="chat-header-title">
           <div className="chat-title-section">
@@ -59,13 +60,15 @@ function ChatSidebar() {
               + New
             </button>
           </div>
-          <button
-            className="chat-toggle"
-            onClick={() => setIsCollapsed(true)}
-            aria-label="Collapse chat"
-          >
-            ✕
-          </button>
+          {!isMobile && (
+            <button
+              className="chat-toggle"
+              onClick={() => setIsCollapsed(true)}
+              aria-label="Collapse chat"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
 

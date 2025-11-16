@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
+  width: 100%;
 }
 
 .indicator-chart {
@@ -11,6 +12,8 @@
   padding: var(--spacing-lg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(102, 126, 234, 0.1);
+  overflow: hidden;
+  width: 100%;
 }
 
 [data-theme="dark"] .indicator-chart {
@@ -21,5 +24,30 @@
 .indicator-chart h3 {
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
+}
+
+/* Mobile optimizations */
+@media (max-width: 767px) {
+  .technical-indicators {
+    gap: var(--spacing-md);
+  }
+  
+  .indicator-chart {
+    padding: var(--spacing-md);
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+  
+  .indicator-chart h3 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  /* Ensure Plotly charts don't overflow */
+  .indicator-chart > div {
+    width: 100% !important;
+    max-width: 100%;
+  }
 }
 

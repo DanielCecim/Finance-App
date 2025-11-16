@@ -1,7 +1,8 @@
 /* Dashboard - Professional Premium Design */
 
 .dashboard {
-  min-height: 100vh;
+  min-height: 100%;
+  width: 100%;
   background: linear-gradient(135deg, #F5F7FA 0%, #E8ECF1 100%);
   padding: var(--spacing-xl) 0;
 }
@@ -164,13 +165,15 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .dashboard {
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-lg) 0;
+    /* Add padding for bottom navigation on mobile */
+    padding-bottom: calc(65px + var(--spacing-lg));
   }
 
   .dashboard-container {
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-md);
   }
 
   .dashboard-title {
@@ -201,9 +204,12 @@
   .tab-button {
     flex: 0 0 auto;
     min-width: 120px;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    font-size: var(--font-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-base);
     white-space: nowrap;
+    /* Increase touch target size for better mobile UX */
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .dashboard-content {

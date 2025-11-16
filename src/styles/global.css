@@ -416,8 +416,8 @@ input, textarea, select {
   }
 }
 
-/* Responsive Typography */
-@media (max-width: 768px) {
+/* Responsive Typography & Mobile Optimizations */
+@media (max-width: 767px) {
   :root {
     --font-6xl: 2.5rem;  /* 40px */
     --font-5xl: 2rem;    /* 32px */
@@ -426,7 +426,49 @@ input, textarea, select {
   
   .container,
   .container-wide {
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-md);
+  }
+  
+  /* Mobile-specific optimizations */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Better touch targets */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px; /* iOS recommended minimum */
+  }
+  
+  /* Remove tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevent zoom on input focus (iOS) */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Small Mobile Adjustments */
+@media (max-width: 480px) {
+  :root {
+    --font-5xl: 1.75rem; /* 28px */
+    --font-4xl: 1.5rem;  /* 24px */
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+  }
+  
+  .container,
+  .container-wide {
+    padding: 0 var(--spacing-sm);
   }
 }
 
