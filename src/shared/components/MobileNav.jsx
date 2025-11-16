@@ -4,7 +4,6 @@ function MobileNav({ activeTab, onTabChange }) {
   const tabs = [
     { id: 'dashboard', icon: '📊', label: 'Dashboard' },
     { id: 'chat', icon: '💬', label: 'AI Chat' },
-    { id: 'settings', icon: '⚙️', label: 'Settings' },
   ]
 
   return (

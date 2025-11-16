@@ -69,13 +69,6 @@ function App() {
             <ChatSidebar isMobile={true} />
           </div>
           
-          <div className={`mobile-view ${activeTab === 'settings' ? 'mobile-view-active' : ''}`}>
-            <div className="settings-view">
-              <h2>Settings</h2>
-              <p>Theme, preferences, and more coming soon...</p>
-            </div>
-          </div>
-          
           {/* Bottom Navigation */}
           <MobileNav activeTab={activeTab} onTabChange={setActiveTab} />
         </div>

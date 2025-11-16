@@ -47,24 +47,6 @@
   }
 }
 
-/* Settings View */
-.settings-view {
-  padding: 2rem 1rem;
-  padding-bottom: calc(65px + 2rem); /* Bottom nav + padding */
-  min-height: 100%;
-  background-color: var(--color-bg, #F5F7FA);
-}
-
-.settings-view h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--color-text, #000000);
-}
-
-.settings-view p {
-  color: var(--color-text-secondary, #6b7280);
-}
-
 /* Safe area for mobile notch/home indicator */
 @supports (padding: max(0px)) {
   .mobile-view {
