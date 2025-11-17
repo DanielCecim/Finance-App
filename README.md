@@ -158,20 +158,6 @@ FinanceApp/
 - **YFinance** - Financial data
 - **SSE-Starlette** - Server-sent events
 
-## 🚀 Deploy to Production
-
-### Railway + Vercel Deployment (30 minutes)
-
-**What you'll get:**
-- ✅ Free tier available
-- ✅ Automatic HTTPS
-- ✅ Auto-deployments from GitHub
-- ✅ Global CDN
-- ✅ Zero DevOps needed
-- ✅ **CORS properly configured for production** 🔒
-
-**Cost:** $0-10/month (free tier + OpenAI usage)
-
 ---
 ### 📖 Complete Step-by-Step Guide
 
