@@ -4,12 +4,12 @@ A modern React-based stock dashboard with AI financial analyst powered by Agno a
 
 ## Features
 
-- 📈 **Interactive Stock Dashboard**: Real-time stock data visualization with Plotly charts
-- 🤖 **AI Financial Analyst**: Chat interface powered by Agno agent with financial tools
-- 📊 **Technical Indicators**: RSI, Moving Averages, Bollinger Bands
-- 💾 **Data Export**: Download stock data in CSV or JSON format
-- 🎨 **Modern UI**: Clean, responsive design following UX best practices
-- ⚡ **Fast & Lightweight**: Built with Vite for optimal performance
+- **Interactive Stock Dashboard**: Real-time stock data visualization with Plotly charts
+-  **AI Financial Analyst**: Chat interface powered by Agno agent with financial tools
+-  **Technical Indicators**: RSI, Moving Averages, Bollinger Bands
+-  **Data Export**: Download stock data in CSV or JSON format
+-  **Modern UI**: Clean, responsive design following UX best practices
+-  **Fast & Lightweight**: Built with Vite for optimal performance
 
 ## Architecture
 
@@ -143,18 +143,6 @@ FinanceApp/
 - `npm run format` - Format code with Prettier
 - `npm run backend` - Start backend server
 
-### Best Practices
-
-This project follows the coding best practices outlined in `coding_best_practices.md`:
-
-- ✅ Feature-based folder structure
-- ✅ Session and conversation tracking
-- ✅ Error boundaries and resilient error handling
-- ✅ Semantic HTML and accessibility
-- ✅ Responsive design
-- ✅ Performance optimization
-- ✅ API contract versioning (v1)
-
 ## Tech Stack
 
 ### Frontend
@@ -185,23 +173,6 @@ This project follows the coding best practices outlined in `coding_best_practice
 **Cost:** $0-10/month (free tier + OpenAI usage)
 
 ---
-
-### 🔧 CORS & Connection Issues Fixed!
-
-The codebase now includes proper CORS configuration and debugging tools:
-
-- ✅ **Dynamic CORS origins** via environment variables
-- ✅ **Preflight request handling** for all endpoints
-- ✅ **Debug endpoint** to test CORS configuration
-- ✅ **Better error messages** for troubleshooting
-- ✅ **Visual test tool** included (`test-cors.html`)
-
-**Having connection issues?** → **[Fix CORS Issues Guide](docs/FIX_CORS_ISSUES.md)** 🔧
-
-**Quick test:** Open `test-cors.html` in your browser to verify your configuration!
-
----
-
 ### 📖 Complete Step-by-Step Guide
 
 **→ [Follow the Deployment Guide](docs/DEPLOY_NOW.md)** ⭐
@@ -246,13 +217,13 @@ The guide covers:
 
 ### 🔗 Useful Links
 
-- 📖 **[DEPLOY NOW - Full Guide](docs/DEPLOY_NOW.md)** - Complete walkthrough
-- 🔧 **[Fix CORS Issues](docs/FIX_CORS_ISSUES.md)** - Troubleshoot connection problems
-- ✅ **[CORS Fixes Applied](CORS_FIXES_APPLIED.md)** - Summary of all fixes
-- ✅ **[Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)** - Pre-launch verification
-- 🔐 **[Environment Variables](docs/ENV_VARIABLES.md)** - Configuration reference
-- 📊 **[Deployment Summary](docs/DEPLOYMENT_SUMMARY.md)** - Overview & costs
-- 🧪 **[CORS Test Tool](test-cors.html)** - Visual testing tool (open in browser)
+-  **[DEPLOY NOW - Full Guide](docs/DEPLOY_NOW.md)** - Complete walkthrough
+-  **[Fix CORS Issues](docs/FIX_CORS_ISSUES.md)** - Troubleshoot connection problems
+-  **[CORS Fixes Applied](CORS_FIXES_APPLIED.md)** - Summary of all fixes
+-  **[Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)** - Pre-launch verification
+-  **[Environment Variables](docs/ENV_VARIABLES.md)** - Configuration reference
+-  **[Deployment Summary](docs/DEPLOYMENT_SUMMARY.md)** - Overview & costs
+-  **[CORS Test Tool](test-cors.html)** - Visual testing tool (open in browser)
 
 ## License
 
