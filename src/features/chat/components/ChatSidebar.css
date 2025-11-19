@@ -8,6 +8,7 @@
   border-left: 1px solid rgba(102, 126, 234, 0.1);
   position: relative;
   overflow: hidden;
+  max-height: 100vh;
 }
 
 [data-theme="dark"] .chat-sidebar {
@@ -99,6 +100,7 @@
   gap: var(--spacing-md);
   max-width: 100%;
   box-sizing: border-box;
+  min-height: 0; /* Important for flex children to respect overflow */
 }
 
 .chat-empty {
@@ -121,9 +123,13 @@
 .chat-sidebar-mobile {
   width: 100% !important;
   height: 100% !important;
+  max-height: 100% !important;
   border: none;
   border-radius: 0;
   position: static;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
 }
 
 .chat-sidebar-mobile .chat-header {
@@ -136,6 +142,7 @@
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  min-height: 0; /* Important for flex children to respect overflow */
   /* Add padding at bottom for safe area */
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
