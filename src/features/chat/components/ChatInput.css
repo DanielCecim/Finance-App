@@ -8,6 +8,15 @@
   flex-shrink: 0; /* Prevent input from shrinking */
 }
 
+/* Ensure input is always visible on mobile */
+.chat-sidebar-mobile .chat-input {
+  position: relative; /* Override sticky for mobile, rely on flex layout */
+  flex-shrink: 0;
+  margin-top: auto; /* Push to bottom in flex container */
+  /* Add safe area padding for mobile devices */
+  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom, 0px));
+}
+
 .chat-input-wrapper {
   display: flex;
   gap: var(--spacing-sm);

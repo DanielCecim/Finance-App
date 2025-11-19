@@ -26,11 +26,16 @@
   left: 0;
   right: 0;
   bottom: 65px; /* Space for bottom nav */
-  overflow-y: auto;
+  overflow-y: auto; /* Default: allow scrolling */
   background-color: var(--color-bg, #F5F7FA);
   display: none; /* Hide by default */
   -webkit-overflow-scrolling: touch;
   z-index: 1;
+}
+
+/* Chat view should not scroll - let chat sidebar handle internal scrolling */
+.mobile-view-chat {
+  overflow: hidden !important; /* Prevent entire view scrolling */
 }
 
 .mobile-view-active {

@@ -65,7 +65,7 @@ function App() {
             <Dashboard />
           </div>
           
-          <div className={`mobile-view ${activeTab === 'chat' ? 'mobile-view-active' : ''}`}>
+          <div className={`mobile-view mobile-view-chat ${activeTab === 'chat' ? 'mobile-view-active' : ''}`}>
             <ChatSidebar isMobile={true} />
           </div>
           
